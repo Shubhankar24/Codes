@@ -1,0 +1,84 @@
+// very important que based on inversion count which can be done in o(n) --> that is brute force & o(nlog n) --> using merge sort and two pointer
+
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution{
+  public:
+  typedef long long int ll;
+  ll merge(ll arr[],ll temp[], ll left, ll mid, ll right){
+      ll i = left;
+      ll k =left;
+      ll j = mid;
+      ll count =0;
+      while((i<=mid-1) && (j<=right)){
+          if(arr[i]<=arr[j]){
+              temp[k++] = arr[i++];
+          }
+          else{
+              temp[k++] = arr[j++];
+              count+=(mid-i);
+          }
+      }
+          while(i<=mid-1){
+            temp[k++] = arr[i++];
+          }
+          while(j<=right){
+              temp[k++] = arr[j++];
+          }
+          for(i =left; i<=right; i++){
+              arr[i] = temp[i];
+          }
+      return count;
+  }
+  ll mergeSort(ll arr[], ll temp[], ll left, ll right){
+      ll count =0,mid;
+      if(right>left){
+          mid = (left+right)/2;
+          count+=mergeSort(arr,temp,left,mid);//for left part of array
+          count+=mergeSort(arr,temp,mid+1,right);//for right part of array
+          
+          count+=merge(arr,temp,left,mid+1,right);
+          
+      }
+      return count;
+      
+  }
+  
+    
+    
+    ll inversionCount(ll arr[], ll N)
+    {
+        ll temp[N];
+        ll ans = mergeSort(arr,temp,0,N-1);
+        return ans;
+    }
+
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    
+    long long T;
+    cin >> T;
+    
+    while(T--){
+        long long N;
+        cin >> N;
+        
+        long long A[N];
+        for(long long i = 0;i<N;i++){
+            cin >> A[i];
+        }
+        Solution obj;
+        cout << obj.inversionCount(A,N) << endl;
+    }
+    
+    return 0;
+}
+
+// } Driver Code Ends
